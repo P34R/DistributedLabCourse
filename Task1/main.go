@@ -30,7 +30,7 @@ func task1() {
 // Task 2
 func generate_random_key(max *big.Int) *big.Int {
 	m := new(big.Int).Set(max) //copying, so max won't be changed
-	m.Sub(m, big.NewInt(1))    //2^n - 1
+	m.Sub(m, big.NewInt(1))    //2^n - 1 max value, not 2^n
 	n, err := rand.Int(rand.Reader, m)
 	if err != nil {
 		panic(err)
