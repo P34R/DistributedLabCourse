@@ -17,9 +17,10 @@ func GenKeyPair() *KeyPair {
 	}
 }
 
-func (p *KeyPair) PublicKey() *ecdsa.PublicKey {
-	return &p.keys.PublicKey
+// PublicKey Same as p.keys.Public()
+func (pair *KeyPair) PublicKey() *ecdsa.PublicKey {
+	return &pair.keys.PublicKey
 }
-func (p *KeyPair) ToString() string {
-	return "private: " + p.keys.D.String() + " X: " + p.keys.PublicKey.X.String() + " Y: " + p.keys.PublicKey.Y.String()
+func (pair *KeyPair) ToString() string {
+	return "private: " + pair.keys.D.String() + " X: " + pair.keys.PublicKey.X.String() + " Y: " + pair.keys.PublicKey.Y.String()
 }
