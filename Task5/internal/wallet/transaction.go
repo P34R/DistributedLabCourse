@@ -1,8 +1,8 @@
 package wallet
 
 import (
-	"crypto/sha256"
 	"encoding/hex"
+	"github.com/P34R/DistributedLabCourse/Task5/internal/cryptography"
 	"strconv"
 )
 
@@ -13,16 +13,15 @@ type Transaction struct {
 }
 
 func CreateTransaction(setOfOperations []*Operation, nonce uint64) *Transaction {
-
+	// Assumed that operations are sorted by timestamp
 	var id string
 	for _, ele := range setOfOperations {
-		id += ele.sender.AccountID + ele.receiver.AccountID + strconv.Itoa(int(ele.amount)) + string(ele.signature)
+		id += ele.Sender.AccountID + ele.Receiver.AccountID + strconv.Itoa(int(ele.Amount)) + string(ele.Signature)
 	}
 	id += strconv.Itoa(int(nonce))
-
-	txID := sha256.Sum256([]byte(id))
+	txID := cryptography.ToSHA256(id)
 	return &Transaction{
-		TxID:            hex.EncodeToString(txID[:]),
+		TxID:            hex.EncodeToString(txID),
 		SetOfOperations: setOfOperations,
 		Nonce:           nonce,
 	}

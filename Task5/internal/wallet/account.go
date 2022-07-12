@@ -1,7 +1,6 @@
 package wallet
 
 import (
-	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
 	"github.com/P34R/DistributedLabCourse/Task5/internal/cryptography"
@@ -20,9 +19,9 @@ func GenAccount() *Account {
 	var wallet []*cryptography.KeyPair
 	wallet = append(wallet, cryptography.GenKeyPair())
 	str := wallet[0].PublicKey().X.Text(16) + wallet[0].PublicKey().Y.Text(16)
-	id := sha256.Sum256([]byte(str))
+	id := cryptography.ToSHA256(str)
 	return &Account{
-		AccountID: hex.EncodeToString(id[:]), //SHA256 hash of first key pair generated in account (may be changed in future)
+		AccountID: hex.EncodeToString(id), //SHA256 hash of first key pair generated in account
 		wallet:    wallet,
 		balance:   0,
 	}
@@ -56,11 +55,11 @@ func (acc *Account) CreateOperation(receiver *Account, amount uint64, index int)
 	if index > len(acc.wallet) {
 		panic("Index out of range")
 	}
-	timestamp := time.Now()
+	timestamp := time.Now().UnixMicro()
 	message :=
-		timestamp.Format(time.Stamp) +
+		strconv.Itoa(int(timestamp)) +
 			acc.AccountID +
 			receiver.AccountID +
 			strconv.Itoa(int(amount))
-	return CreateOperation(timestamp.Format(time.Stamp), acc, receiver, amount, acc.SignData(message, index))
+	return CreateOperation(strconv.Itoa(int(timestamp)), acc, receiver, amount, acc.SignData(message, index))
 }
