@@ -48,6 +48,9 @@ func (acc *Account) PrintBalance() {
 }
 
 func (acc *Account) SignData(message string, index int) []byte {
+	if index > len(acc.wallet) {
+		panic("index out of range")
+	}
 	return cryptography.SignData(message, acc.wallet[index])
 }
 

@@ -14,6 +14,9 @@ type Operation struct {
 }
 
 func CreateOperation(timestamp string, sender, receiver *Account, amount uint64, signature []byte) *Operation {
+	if amount == 0 {
+		panic("Don't spam with 0 amount operations :/")
+	}
 	return &Operation{
 		timestamp: timestamp,
 		Sender:    sender,
